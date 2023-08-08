@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import List, Optional
 
 
@@ -11,3 +12,4 @@ class Image:
 class MediaResult:
     caption: Optional[str]
     images: List[Image]
+    pub_date: datetime
