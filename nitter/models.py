@@ -7,6 +7,12 @@ from typing import List, Optional
 class Image:
     src: str
 
+    def __str__(self) -> str:
+        return self.src
+
+    def __repr__(self) -> str:
+        return f"Image({self.src})"
+
 
 @dataclass
 class MediaResult:
