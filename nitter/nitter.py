@@ -1,20 +1,23 @@
 import time
 from datetime import datetime
-from typing import List
+from typing import List, Dict, Any
 from xml.etree import ElementTree
 
 from bs4 import BeautifulSoup
+from requests import HTTPError, ConnectionError, Session
 
-from .base import SourceBase
-from ..models import MediaResult
+from .exceptions import NetworkException
+from .models import MediaResult
 
 
-class Nitter(SourceBase):
-    def __init__(self) -> None:
-        super().__init__(
-            'Nitter',
-            'https://nitter.moomoo.me'
-        )
+class Nitter:
+    def __init__(self, timeout=10, proxies=None) -> None:
+        self.timeout = timeout
+
+        self._session = Session()
+        self._session.proxies = proxies
+
+        self._base_url = 'https://nitter.moomoo.me'
 
     def get_medias(self, username: str) -> List[MediaResult]:
         medias = []
@@ -51,3 +54,14 @@ class Nitter(SourceBase):
             )
 
         return medias
+
+    def _make_request(self, path: str, params: Dict[str, Any] = None) -> str:
+        try:
+            req = self._session.get(
+                f"{self._base_url}/{path}",
+                params=params,
+                timeout=self.timeout,
+            )
+            return req.text
+        except (ConnectionError, HTTPError):
+            raise NetworkException(f"Cannot connect to Nitter")
