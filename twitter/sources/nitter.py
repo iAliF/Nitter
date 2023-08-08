@@ -1,3 +1,4 @@
+from typing import List
 from xml.etree import ElementTree
 
 from bs4 import BeautifulSoup
@@ -13,13 +14,26 @@ class Nitter(SourceBase):
             'https://nitter.moomoo.me'
         )
 
-    def get_medias(self, username: str) -> MediaResult:
-        images = []
+    def get_medias(self, username: str) -> List[MediaResult]:
+        medias = []
 
         data = self._make_request(f"{username}/media/rss")
         root = ElementTree.fromstring(data)
 
         for item in root.findall('channel/item/description'):
-            print(item, end="=============\n")
+            bs4 = BeautifulSoup(item.text, 'html.parser')
 
+            caption = bs4.find('p').text or None
+            images = [
+                img['src']
+                for img in bs4.find_all('img')
+            ]
 
+            medias.append(
+                MediaResult(
+                    caption,
+                    images
+                )
+            )
+
+        return medias

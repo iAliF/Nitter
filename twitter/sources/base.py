@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 import requests
 from requests import RequestException
@@ -17,7 +17,7 @@ class SourceBase:
         self._base_url = base_url
 
     @abstractmethod
-    def get_medias(self, username: str) -> MediaResult:
+    def get_medias(self, username: str) -> List[MediaResult]:
         pass
 
     def _make_request(self, path: str, params: Dict[str, Any] = None) -> str:
