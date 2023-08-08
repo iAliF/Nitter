@@ -16,8 +16,7 @@ class Nitter(SourceBase):
     def get_medias(self, username: str) -> MediaResult:
         images = []
 
-        data = self._make_request(f"{username}/media")
-        print(data)
+        data = self._make_request(f"{username}/media/rss")
         root = ElementTree.fromstring(data)
 
         for item in root.findall('channel/item/description'):
