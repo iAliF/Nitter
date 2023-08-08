@@ -2,8 +2,9 @@ from abc import abstractmethod
 from typing import Dict, Any, List
 
 import requests
-from requests import RequestException
+from requests import ConnectionError, HTTPError
 
+from ..exceptions import NetworkException
 from ..models import MediaResult
 
 
@@ -29,5 +30,5 @@ class SourceBase:
                 proxies=self.proxies
             )
             return req.text
-        except RequestException as e:
-            print(e)
+        except (ConnectionError, HTTPError):
+            raise NetworkException(f"Cannot connect to {self.source_name}")
