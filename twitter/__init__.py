@@ -1,6 +1,4 @@
-__all__ = (
-    'SourceBase',
-    'Nitter',
-)
+from .models import MediaResult, Image
+from .sources.base import SourceBase
 
-from .sources import SourceBase, Nitter
+__version__ = '0.0.1'
