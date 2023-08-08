@@ -9,7 +9,7 @@ with open(path.join(current_dir, 'README.md')) as f:
 setup(
     name='nitter',
     packages=find_packages(),
-    version='0.0.1',
+    version='0.0.2',
     license='MIT',
     description='Nitter is a simple library to scrap Twitter data using the Nitter website',
     long_description=description,
@@ -17,7 +17,7 @@ setup(
     author='Ali Fotouhi',
     author_email='the.alif.dev@gmail.com ',
     url='https://github.com/iAliF/Nitter/',
-    download_url='https://github.com/iAliF/Nitter/archive/refs/tags/v0.0.1-alpha.zip',
+    download_url='https://github.com/iAliF/Nitter/archive/refs/tags/v0.0.2-alpha.zip',
     install_requires=['requests', 'beautifulsoup4'],
     keywords=[
         'Nitter', 'Twitter', 'Twitter Scraper'
