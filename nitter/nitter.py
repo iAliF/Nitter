@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from requests import HTTPError, ConnectionError, Session
 
 from .exceptions import NetworkException
-from .models import MediaResult
+from .models import MediaResult, Image
 
 
 class Nitter:
@@ -33,7 +33,7 @@ class Nitter:
 
             caption = bs4.find('p').text or None
             images = [
-                img['src']
+                Image(img['src'])
                 for img in bs4.find_all('img')
             ]
             dt = datetime.fromtimestamp(
