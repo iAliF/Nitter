@@ -21,7 +21,6 @@ class SourceBase:
         pass
 
     def _make_request(self, path: str, params: Dict[str, Any] = None) -> str:
-        print(f"{self._base_url}/{path}")
         try:
             req = self._session.get(
                 f"{self._base_url}/{path}",
