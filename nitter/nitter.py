@@ -19,8 +19,8 @@ class Nitter:
 
         self._base_url = 'https://nitter.moomoo.me'
 
-    def get_medias(self, username: str) -> List[MediaResult]:
-        medias = []
+    def get_media(self, username: str) -> List[MediaResult]:
+        media = []
 
         data = self._make_request(f"{username}/media/rss")
         root = ElementTree.fromstring(data)
@@ -45,7 +45,7 @@ class Nitter:
                 )
             )
 
-            medias.append(
+            media.append(
                 MediaResult(
                     caption,
                     images,
@@ -53,7 +53,7 @@ class Nitter:
                 )
             )
 
-        return medias
+        return media
 
     def _make_request(self, path: str, params: Dict[str, Any] = None) -> str:
         try:
