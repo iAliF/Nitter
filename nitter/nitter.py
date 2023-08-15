@@ -1,7 +1,6 @@
 import time
 from datetime import datetime
 from typing import List, Dict, Any
-from xml.etree import ElementTree
 
 from bs4 import BeautifulSoup
 from requests import HTTPError, ConnectionError, Session
@@ -19,37 +18,44 @@ class Nitter:
 
         self._base_url = 'https://nitter.moomoo.me'
 
+    def format_url(self, url: str) -> str:
+        return f'{self._base_url}{url}'
+
     def get_media(self, username: str) -> List[MediaResult]:
         media = []
 
-        data = self._make_request(f"{username}/media/rss")
-        root = ElementTree.fromstring(data)
+        data = self._make_request(f"{username}/media")
+        bs4 = BeautifulSoup(
+            data,
+            'html.parser'
+        )
 
-        for item in root.findall('channel/item'):
-            bs4 = BeautifulSoup(
-                item.find('description').text,
-                'html.parser'
-            )
+        for item in bs4.find_all('div', {'class': 'timeline-item'}):
+            caption = item.find_next('div', {'class': 'tweet-content media-body'}).text
 
-            caption = bs4.find('p').text or None
-            images = [
-                Image(img['src'])
-                for img in bs4.find_all('img')
-            ]
-            dt = datetime.fromtimestamp(
+            tweet_date = item.find_next('span', {'class': 'tweet-date'})
+            tweet_date = datetime.fromtimestamp(
                 time.mktime(
                     time.strptime(
-                        item.find('pubDate').text,
-                        '%a, %d %b %Y %H:%M:%S GMT'
+                        tweet_date.find('a')["title"],
+                        '%b %d, %Y · %H:%M %p UTC'
                     )
                 )
             )
+
+            images = []
+            for image in item.find_all('div', {'class': 'attachment image'}):
+                images.append(
+                    Image(
+                        self.format_url(image.find_next('a', {'class': 'still-image'})['href'])
+                    )
+                )
 
             media.append(
                 MediaResult(
                     caption,
                     images,
-                    dt
+                    tweet_date
                 )
             )
 
