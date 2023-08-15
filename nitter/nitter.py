@@ -38,7 +38,7 @@ class Nitter:
                 time.mktime(
                     time.strptime(
                         tweet_date.find('a')["title"],
-                        '%b %d, %Y · %H:%M %p UTC'
+                        '%b %d, %Y · %I:%M %p UTC'
                     )
                 )
             )
